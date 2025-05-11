@@ -19,7 +19,7 @@ public class Main {
             scanner.nextLine(); // flush
 
             switch (choice) {
-                case 1 -> {
+                case 1:
                     System.out.print("Username: ");
                     String username = scanner.nextLine();
                     System.out.print("Password: ");
@@ -29,18 +29,19 @@ public class Main {
 
                     boolean success = userDAO.createUser(new User(0, username, password, type, 0));
                     System.out.println(success ? "Registration successful!" : "Failed to register.");
-                }
-                case 2 -> {
+                    break;
+
+                case 2:
                     System.out.print("Username: ");
-                    String username = scanner.nextLine();
-                    Optional<User> userOpt = userDAO.findByUsername(username);
+                    String loginUsername = scanner.nextLine();
+                    Optional<User> userOpt = userDAO.findByUsername(loginUsername);
 
                     if (userOpt.isPresent()) {
                         User user = userOpt.get();
                         System.out.print("Password: ");
-                        String password = scanner.nextLine();
+                        String loginPassword = scanner.nextLine();
 
-                        if (user.getPassword().equals(password)) {
+                        if (user.getPassword().equals(loginPassword)) {
                             System.out.println("Login successful as " + user.getType());
                             // TODO: route to manager/client dashboard
                         } else {
@@ -49,12 +50,15 @@ public class Main {
                     } else {
                         System.out.println("User not found.");
                     }
-                }
-                case 0 -> {
+                    break;
+
+                case 0:
                     System.out.println("Goodbye!");
                     return;
-                }
-                default -> System.out.println("Invalid choice.");
+
+                default:
+                    System.out.println("Invalid choice.");
+                    break;
             }
         }
     }
