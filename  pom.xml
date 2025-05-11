@@ -1,15 +1,40 @@
-package config;
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-        import java.sql.Connection;
-        import java.sql.DriverManager;
-        import java.sql.SQLException;
+    <modelVersion>4.0.0</modelVersion>
 
-        public class DBConnection {
-        private static final String URL = "jdbc:mysql://localhost:3306/inventory_system";
-        private static final String USER = "root";
-        private static final String PASSWORD = "your_password";
+    <groupId>com.yourcompany</groupId>
+    <artifactId>inventory-management</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
-        public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
-        }
-        }
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <!-- MySQL JDBC Driver -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.3.0</version>
+        </dependency>
+
+
+        <!-- Optional: Logging (for better error tracking) -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.9</version>
+        </dependency>
+    </dependencies>
+
+</project>
