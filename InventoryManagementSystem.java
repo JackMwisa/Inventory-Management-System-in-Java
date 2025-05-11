@@ -2,14 +2,15 @@ import java.util.Scanner;
 import UserSystem.*;
 import ProductSystem.*;
 import CartSystem.*;
-import static CartSystem.cartFileManagement.*;
+
+import static CartSystem.CartFileManagement.*;
 import static UserSystem.UserFileManagement.*;
 
 public class InventoryManagementSystem {
 
     public static UserFileManagement user = new UserFileManagement();
-    public static productFileManagement product = new productFileManagement();
-    public static cartFileManagement cart = new cartFileManagement();
+    public static ProductFileManagement product = new ProductFileManagement();
+    public static CartFileManagement cart = new CartFileManagement();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -25,12 +26,12 @@ public class InventoryManagementSystem {
             switch (choice) {
                 case 1:
                     boolean userCheck = user.loginUser();
-                    if(userCheck){
-                        String type = UserFileManagement.currentUser.getFirst().getType();
-                        String username = UserFileManagement.currentUser.getFirst().getUsername();
-                        if(type.equals("CLIENT")){
+                    if (userCheck) {
+                        String type = currentUser.getFirst().getType();
+                        String username = currentUser.getFirst().getUsername();
+                        if (type.equalsIgnoreCase("CLIENT")) {
                             userMenu(username);
-                        }else if(type.equals("MANAGER")){
+                        } else if (type.equalsIgnoreCase("MANAGER")) {
                             managementMenu(username);
                         }
                     }
@@ -44,19 +45,16 @@ public class InventoryManagementSystem {
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
-                    break;
             }
         }
     }
 
-    // Updated userMenu with username as a parameter
     public static void userMenu(String username) {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
 
         while (!exit) {
             System.out.println("\n--- Client Menu ---");
-            System.out.println("\n====================");
             System.out.println("1. View Items in warehouse");
             System.out.println("2. Add Item to Cart");
             System.out.println("3. Remove Item from Cart");
@@ -72,27 +70,27 @@ public class InventoryManagementSystem {
             System.out.print("Please choose an option: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Handle the newline character
+            scanner.nextLine(); // Handle newline
 
             switch (choice) {
                 case 1:
-                    productFileManagement.viewProducts();
+                    product.viewProducts();
                     break;
                 case 2:
-                    System.out.println("Enter the product ID to add to the cart: ");
+                    System.out.print("Enter the product ID to add to the cart: ");
                     String productId = scanner.nextLine();
-                    System.out.println("Enter the quantity: ");
+                    System.out.print("Enter the quantity: ");
                     int quantity = scanner.nextInt();
-                    scanner.nextLine(); // Handle newline
-                    cartFileManagement.addItemToCart(username, productId, quantity);
+                    scanner.nextLine();
+                    cart.addItemToCart(username, productId, quantity);
                     break;
                 case 3:
-                    System.out.println("Enter the product ID you want to remove: ");
+                    System.out.print("Enter the product ID you want to remove: ");
                     String productToRemove = scanner.nextLine();
-                    cartFileManagement.removeItemFromCart(username, productToRemove);
+                    cart.removeItemFromCart(username, productToRemove);
                     break;
                 case 4:
-                    cartFileManagement.viewCart();
+                    cart.viewCart();
                     break;
                 case 5:
                     viewBalance();
@@ -101,9 +99,9 @@ public class InventoryManagementSystem {
                     cart.finalizePurchase(username);
                     break;
                 case 7:
-                    System.out.println("Enter the amount to add to your balance: ");
+                    System.out.print("Enter the amount to add to your balance: ");
                     double amountToAdd = scanner.nextDouble();
-                    scanner.nextLine(); // Handle newline
+                    scanner.nextLine();
                     System.out.println("Your new balance is: " + addBalance(amountToAdd));
                     break;
                 case 8:
@@ -113,23 +111,18 @@ public class InventoryManagementSystem {
                     cart.viewOrderHistory(username);
                     break;
                 case 10:
-                    // search for item in the cart
+                    // Optional: Implement cart search functionality
                     break;
                 case 11:
-                    exit = true;
-                    break;
                 case 12:
-                    System.out.println("Exiting to the main menu...");
                     exit = true;
                     break;
                 default:
                     System.out.println("Invalid choice, please try again.");
-                    break;
             }
         }
     }
 
-    // Updated managementMenu
     public static void managementMenu(String username) {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
@@ -146,33 +139,34 @@ public class InventoryManagementSystem {
             System.out.println("8. Calculate Average Purchase");
             System.out.println("9. Exit to Main Menu");
             System.out.print("Please choose an option: ");
+
             int choice = scanner.nextInt();
             scanner.nextLine(); // Handle newline
 
             switch (choice) {
                 case 1:
-                    productFileManagement.viewProducts();
+                    product.viewProducts();
                     break;
                 case 2:
-                    productFileManagement.addNewProduct();
+                    product.addNewProduct();
                     break;
                 case 3:
-                    System.out.println("Enter item Id: ");
+                    System.out.print("Enter item Id: ");
                     String itemId = scanner.nextLine();
-                    productFileManagement.updateProduct(itemId);
+                    product.updateProduct(itemId);
                     break;
                 case 4:
-                    System.out.println("Enter item Id: ");
-                    String itemIdTorm = scanner.nextLine();
-                    productFileManagement.removeProduct(itemIdTorm);
+                    System.out.print("Enter item Id: ");
+                    String itemIdToRemove = scanner.nextLine();
+                    product.removeProduct(itemIdToRemove);
                     break;
                 case 5:
-                    // warehouse account
+                    viewBalance();
                     break;
                 case 6:
-                    System.out.println("Enter product name to search: ");
+                    System.out.print("Enter product name to search: ");
                     String productName = scanner.nextLine();
-                    //        productFileManagement.searchProduct(productName);
+                    product.searchProduct(productName); // Uncomment if implemented
                     break;
                 case 7:
                     cart.viewOrderHistoryAll();
@@ -189,10 +183,9 @@ public class InventoryManagementSystem {
         }
     }
 
-    // Helper method to fetch the logged-in username
     public static String getLoggedInUsername() {
         for (UserTemp userTemp : currentUser) {
-            return userTemp.getUsername(); // Assuming currentUser contains the logged-in user
+            return userTemp.getUsername();
         }
         return "";
     }
